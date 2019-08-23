@@ -18,7 +18,6 @@ class TodoListViewController: UITableViewController {
         }
     }
     var todoItems: Results<Item>?
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     
     // MARK: - Lifecycle Events
