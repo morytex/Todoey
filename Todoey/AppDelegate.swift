@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import RealmSwift
+import ChameleonFramework
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,25 +19,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-//        
-//        let config = Realm.Configuration(
-//            schemaVersion: 1,
-//            migrationBlock: { (migration, oldSchemaVersion) in
-//                if (oldSchemaVersion < 1) {
-//                    migration.enumerateObjects(ofType: Item.className(), { (oldObject, newObject) in
-//                        if let dateCreated = oldObject!["dateCreated"] as? Date {
-//                            newObject!["dateCreated"] = dateCreated
-//                        } else {
-//                            newObject!["dateCreated"] = Date()
-//                        }
-//                    })
-//                }
-//        })
-//        
-//        Realm.Configuration.defaultConfiguration = config
         
-//        print("Realm file URL: \(Realm.Configuration.defaultConfiguration.fileURL!)")
-//        print("Realm schema version: \(Realm.Configuration.defaultConfiguration.schemaVersion)")
+        let config = Realm.Configuration(
+            schemaVersion: 1,
+            migrationBlock: { (migration, oldSchemaVersion) in
+                if (oldSchemaVersion < 1) {
+                    migration.enumerateObjects(ofType: Category.className(), { (oldObject, newObject) in
+                        if let hexColor = newObject!["colour"] as? String {
+                            newObject!["colour"] = hexColor != "" ? hexColor : UIColor.randomFlat.hexValue()
+                        } else {
+                            newObject!["colour"] = UIColor.randomFlat.hexValue()
+                        }
+                    })
+                }
+        })
+        
+        Realm.Configuration.defaultConfiguration = config
+        
+        print("Realm file URL: \(Realm.Configuration.defaultConfiguration.fileURL!)")
+        print("Realm schema version: \(Realm.Configuration.defaultConfiguration.schemaVersion)")
         
         do {
             _ = try Realm()
